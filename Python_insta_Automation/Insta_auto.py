@@ -31,7 +31,7 @@ class insta_auto:
         COOKIE_XPATH = (By.XPATH, "//button[text()='Allow all cookies']")
         l = self.driver.find_element(*COOKIE_XPATH)
         l.click()
-        sleep(1)
+        sleep(3)
 
     def _enter_username(self):
         """Enter the username"""
@@ -87,6 +87,15 @@ class insta_auto:
 
         # Wait for 10 seconds
         sleep(10)
+
+
+    def like_post(self, post_link):
+        """Like the post"""
+        self.driver.get(post_link)
+        LIKE_XPATH = (By.XPATH, "//div[@class='x78zum5']//div[@class='x1ypdohk']//div[@role='button']")
+        l = self.driver.find_element(*LIKE_XPATH)
+        l.click()
+        sleep(1)
 
     
     def liking_commenting_Hashtags(self,Hashtag):
@@ -176,4 +185,6 @@ if __name__=='__main__':
     Ins_auto.login()
     # Deny any alerts
     Ins_auto.accept_alerts("No")
+    # Like the post
+    Ins_auto.like_post("https://www.instagram.com/p/C9ZtTF0txeK/")
 
