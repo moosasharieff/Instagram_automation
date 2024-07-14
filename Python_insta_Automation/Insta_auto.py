@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from random import choice
 from time import sleep
 from selenium.webdriver.common.by import By
+from creds import username, password
 
 
 class insta_auto:
@@ -12,7 +13,7 @@ class insta_auto:
     comments = [
         'Amazing'   ,   'Awesome!'  ,   'Nice :)'   ,   'SuperB !!' ,   'Sukhibhava !!'
     ]
-    def __init__(self):
+    def __init__(self, username, password):
         # self.login(u_n,pw)
         # self.like_commenter_feed()
         # self.liking_commenting_Hashtags('technology')
@@ -20,6 +21,9 @@ class insta_auto:
         # self.driver.close()
         self.driver = webdriver.Chrome()
         self.driver.get("https://instagram.com/")
+        self.username = username
+        self.password = password
+
         sleep(5)
 
     def _accept_cookies(self):
@@ -27,20 +31,23 @@ class insta_auto:
         COOKIE_XPATH = (By.XPATH, "//button[text()='Allow all cookies']")
         l = self.driver.find_element(*COOKIE_XPATH)
         l.click()
+        sleep(1)
 
-    def _enter_username(self, username):
+    def _enter_username(self):
         """Enter the username"""
         USERNAME_XPATH = (By.XPATH, "//input[@name='username']")
         l = self.driver.find_element(*USERNAME_XPATH)
-        l.send_keys(username)
+        l.send_keys(self.username)
         l.click()
+        sleep(1)
 
-    def _enter_password(self, password):
+    def _enter_password(self):
         """Enter the password"""
         PASSWORD_XPATH = (By.XPATH, "//input[@name='password']")
         l = self.driver.find_element(*PASSWORD_XPATH)
-        l.send_keys(password)
+        l.send_keys(self.password)
         l.click()
+        sleep(1)
 
     def _submit_login(self):
         """Submit login button"""
@@ -48,18 +55,31 @@ class insta_auto:
         l = self.driver.find_element(*LOGIN_XPATH)
         l.click()
 
+    def accept_alerts(self, value="No"):
+        """Not accepting alerts after logging in
+        By Default, it will say no.
+        """
+        if value == "Yes":
+            CONDITION_XPATH = (By.XPATH, "//button[text()='Turn On']")
+        else:
+            CONDITION_XPATH = (By.XPATH, "//button[text()='Not Now']")
 
-    def login(self,username,password):
+        l = self.driver.find_element(*CONDITION_XPATH)
+        l.click()
+
+
+    def login(self):
         """Logging into Instagram"""
 
         # Accepting cookies
         self._accept_cookies()
 
+
         # Enter Username
-        self._enter_username(username)
+        self._enter_username()
 
         # Enter Password
-        self._enter_password(password)
+        self._enter_password()
 
 
         # Click Submit Button
@@ -151,8 +171,9 @@ class insta_auto:
 
 if __name__=='__main__':
 
-    Ins_auto = insta_auto()
-    username = "Enter here"
-    password = "Enter here"
+    Ins_auto = insta_auto(username, password)
     # Login
-    Ins_auto.login(username, password)
+    Ins_auto.login()
+    # Deny any alerts
+    Ins_auto.accept_alerts("No")
+
